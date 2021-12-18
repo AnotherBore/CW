@@ -29,6 +29,8 @@ namespace CW
             Life = 20 + rand.Next(100);
         }
 
+
+
         public virtual void Draw(Graphics g)
         {
             float k = Math.Min(1f, Life / 100);

@@ -25,7 +25,7 @@ namespace CW
     }
     public class GravityPoint : IImpactPoint
     {
-        public int Power = 500;
+        public int Power = 100;
 
         public GravityPoint(float x, float y) : base(x, y)
         {

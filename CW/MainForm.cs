@@ -13,7 +13,7 @@ namespace CW
                 Width = picDisplay.Width,
                 GravitationY = 0.25f
             };
-            emitter.gravityPoints.Add(new GravityPoint(picDisplay.Width / 2, picDisplay.Height / 2));
+            //emitter.gravityPoints.Add(new GravityPoint(picDisplay.Width / 2, picDisplay.Height / 2));
         }
 
         private void timer_Tick(object sender, EventArgs e)
