@@ -3,6 +3,8 @@ namespace CW
     public partial class MainForm : Form
     {
         List<Particle> particles = new List<Particle>();
+        private int MousePositionX = 0;
+        private int MousePositionY = 0;
         public MainForm()
         {
 
@@ -26,9 +28,22 @@ namespace CW
         {
             foreach (var particle in particles)
             {
-                var directionInRadians = particle.Direction / 180 * Math.PI;
-                particle.X += (float)(particle.Speed * Math.Cos(directionInRadians));
-                particle.Y -= (float)(particle.Speed * Math.Sin(directionInRadians));
+                particle.Life -= 1; 
+
+                if (particle.Life < 0)
+                {
+                    particle.Life = 20 + Particle.rand.Next(100);
+
+                    particle.X = MousePositionX;
+                    particle.Y = MousePositionY;
+                }
+                else
+                {
+                    var directionInRadians = particle.Direction / 180 * Math.PI;
+                    particle.X += (float)(particle.Speed * Math.Cos(directionInRadians));
+                    particle.Y -= (float)(particle.Speed * Math.Sin(directionInRadians));
+                }
+
             }
         }
 
@@ -49,6 +64,12 @@ namespace CW
                 Render(g);
             }
             picDisplay.Invalidate();
+        }
+
+        private void picDisplay_MouseMove(object sender, MouseEventArgs e)
+        {
+            MousePositionX = e.X;
+            MousePositionY = e.Y;
         }
     }
 }
