@@ -9,12 +9,27 @@ namespace CW
     public class Emitter
     {
         List<Particle> particles = new List<Particle>();
-        public List<Point> gravityPoints = new List<Point>();
+        public List<IImpactPoint> gravityPoints = new List<IImpactPoint>();
 
         public int MousePositionX;
         public int MousePositionY;
         public float GravitationX = 0;
         public float GravitationY = 1;
+
+        public virtual void ResetParticle(Particle particle)
+        {
+            particle.Life = 20 + Particle.rand.Next(100);
+            particle.X = MousePositionX;
+            particle.Y = MousePositionY;
+
+            var direction = (double)Particle.rand.Next(360);
+            var speed = 1 + Particle.rand.Next(10);
+
+            particle.SpeedX = (float)(Math.Cos(direction / 180 * Math.PI) * speed);
+            particle.SpeedY = -(float)(Math.Sin(direction / 180 * Math.PI) * speed);
+
+            particle.Radius = 2 + Particle.rand.Next(10);
+        }
 
         public void UpdateState()
         {
@@ -27,8 +42,7 @@ namespace CW
                     particle.FromColor = Color.Yellow;
                     particle.ToColor = Color.FromArgb(0, Color.Magenta);
 
-                    particle.X = MousePositionX;
-                    particle.Y = MousePositionY;
+                    ResetParticle(particle);
                     particles.Add(particle);
                 }
                 else
@@ -42,28 +56,13 @@ namespace CW
 
                 if (particle.Life < 0)
                 {
-                    particle.Life = 20 + Particle.rand.Next(100);
-
-                    particle.X = MousePositionX;
-                    particle.Y = MousePositionY;
-
-                    var direction = (double)Particle.rand.Next(360);
-                    var speed = 1 + Particle.rand.Next(10);
-
-                    particle.SpeedX = (float)(Math.Cos(direction / 180 * Math.PI) * speed);
-                    particle.SpeedY = -(float)(Math.Sin(direction / 180 * Math.PI) * speed);
+                    ResetParticle(particle);
                 }
                 else
                 {
                     foreach (var point in gravityPoints)
                     {
-                        float gX = point.X - particle.X;
-                        float gY = point.Y - particle.Y;
-                        float r2 = (float)Math.Max(100, gX * gX + gY * gY);
-                        float M = 100;
-
-                        particle.SpeedX += (gX) * M / r2;
-                        particle.SpeedY += (gY) * M / r2;
+                        point.ImpactParticle(particle);
                     }
 
                     particle.SpeedX += GravitationX;
@@ -85,14 +84,24 @@ namespace CW
 
             foreach (var point in gravityPoints)
             {
-                g.FillEllipse(
-                    new SolidBrush(Color.Red),
-                    point.X - 5,
-                    point.Y - 5,
-                    10,
-                    10
-                );
+                point.Render(g);
             }
+        }
+    }
+
+    public class TopEmitter : Emitter
+    {
+        public int Width;
+        public override void ResetParticle(Particle particle)
+        {
+            base.ResetParticle(particle); 
+
+          
+            particle.X = Particle.rand.Next(Width);
+            particle.Y = 0;  
+
+            particle.SpeedY = 1; 
+            particle.SpeedX = Particle.rand.Next(-2, 2); 
         }
     }
 }

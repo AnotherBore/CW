@@ -8,7 +8,12 @@ namespace CW
 
             InitializeComponent();
             picDisplay.Image = new Bitmap(picDisplay.Width, picDisplay.Height);
-            emitter.gravityPoints.Add(new Point(picDisplay.Width / 2, picDisplay.Height / 2));
+            emitter = new TopEmitter
+            {
+                Width = picDisplay.Width,
+                GravitationY = 0.25f
+            };
+            emitter.gravityPoints.Add(new GravityPoint(picDisplay.Width / 2, picDisplay.Height / 2));
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -26,6 +31,11 @@ namespace CW
         {
             emitter.MousePositionX = e.X;
             emitter.MousePositionY = e.Y;
+        }
+
+        private void picDisplay_MouseClick(object sender, MouseEventArgs e)
+        {
+
         }
     }
 }
