@@ -22,5 +22,14 @@ namespace CW
             Speed = 1 + rand.Next(10);
             Radius = 2 + rand.Next(10);
         }
+
+        public void Draw(Graphics g)
+        {        
+            var b = new SolidBrush(Color.Black);
+          
+            g.FillEllipse(b, X - Radius, Y - Radius, Radius * 2, Radius * 2);
+
+            b.Dispose();
+        }
     }
 }
