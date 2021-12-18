@@ -8,6 +8,7 @@ namespace CW
 
             InitializeComponent();
             picDisplay.Image = new Bitmap(picDisplay.Width, picDisplay.Height);
+            emitter.gravityPoints.Add(new Point(picDisplay.Width / 2, picDisplay.Height / 2));
         }
 
         private void timer_Tick(object sender, EventArgs e)
