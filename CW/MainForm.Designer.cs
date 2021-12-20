@@ -62,6 +62,7 @@
             this.picDisplay.TabStop = false;
             this.picDisplay.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picDisplay_MouseClick);
             this.picDisplay.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picDisplay_MouseMove);
+            this.picDisplay.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picDisplay_MouseUp);
             // 
             // timer
             // 
@@ -133,7 +134,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1584, 15);
+            this.label1.Location = new System.Drawing.Point(1571, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(246, 32);
             this.label1.TabIndex = 1;
@@ -160,7 +161,7 @@
             // lblSpeedMain
             // 
             this.lblSpeedMain.AutoSize = true;
-            this.lblSpeedMain.Location = new System.Drawing.Point(1584, 143);
+            this.lblSpeedMain.Location = new System.Drawing.Point(1584, 152);
             this.lblSpeedMain.Name = "lblSpeedMain";
             this.lblSpeedMain.Size = new System.Drawing.Size(137, 32);
             this.lblSpeedMain.TabIndex = 5;
@@ -187,7 +188,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(1584, 289);
+            this.label5.Location = new System.Drawing.Point(1584, 303);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(267, 32);
             this.label5.TabIndex = 8;
@@ -196,7 +197,7 @@
             // lblMaxRadius
             // 
             this.lblMaxRadius.AutoSize = true;
-            this.lblMaxRadius.Location = new System.Drawing.Point(1585, 321);
+            this.lblMaxRadius.Location = new System.Drawing.Point(1584, 340);
             this.lblMaxRadius.Name = "lblMaxRadius";
             this.lblMaxRadius.Size = new System.Drawing.Size(151, 32);
             this.lblMaxRadius.TabIndex = 9;

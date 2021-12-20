@@ -8,7 +8,7 @@ namespace CW
 {
     public class Emitter
     {
-        List<Particle> particles = new List<Particle>();
+        public List<Particle> particles = new List<Particle>();
         public List<IImpactPoint> gravityPoints = new List<IImpactPoint>();
 
         public int X; // координата X центра эмиттера
