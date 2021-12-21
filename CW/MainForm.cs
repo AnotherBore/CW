@@ -6,6 +6,7 @@ namespace CW
         List<CounterCircle> counterCircles = new List<CounterCircle>(); 
         Emitter emitter;
         CounterCircle counterCircle;
+        int ModeForClick;
         public MainForm()
         {
 
@@ -14,7 +15,7 @@ namespace CW
             this.emitter = new TopEmitter
             {
                 Width = picDisplay.Width,
-                Direction = 0,
+                Direction = 90,
                 Spreading = 10,
                 SpeedMain = 1,
                 SpeedOfFlow = 0,
@@ -80,31 +81,53 @@ namespace CW
 
         private void picDisplay_MouseUp(object sender, MouseEventArgs e)
         {
-            if ( e.Button == MouseButtons.Left)
+            if(ModeForClick != 0)
             {
-                IImpactPoint counterCircle = new CounterCircle(e.X, e.Y);
-                emitter.impactPoints.Add(counterCircle);
-            }
-            var count = emitter.impactPoints.Count;
-            if (e.Button == MouseButtons.Right)
-            {
-                for (int i = 0; i < count; i++)
+                if (ModeForClick == 1)
                 {
-                    
-                    var counterCircle = (CounterCircle)emitter.impactPoints[i];
-
-                    var x = Math.Abs(e.X - counterCircle.X);
-                    var y = Math.Abs(e.Y - counterCircle.Y);
-                    var lenght = Math.Sqrt(x * x + y * y);
-                    if (lenght < counterCircle.Radius)
+                    var count = emitter.impactPoints.Count;
+                    if (e.Button == MouseButtons.Left)
                     {
-                        emitter.impactPoints.Remove(counterCircle);
-                        i--;
+                        IImpactPoint counterCircle = new CounterCircle(e.X, e.Y);
+                        emitter.impactPoints.Add(counterCircle);
+                    }                  
+                    else if (e.Button == MouseButtons.Right)
+                    {
+                        for (int i = 0; i < count; i++)
+                        {
+
+                            var counterCircle = (CounterCircle)emitter.impactPoints[i];
+
+                            var x = Math.Abs(e.X - counterCircle.X);
+                            var y = Math.Abs(e.Y - counterCircle.Y);
+                            var lenght = Math.Sqrt(x * x + y * y);
+                            if (lenght < counterCircle.Radius)
+                            {
+                                emitter.impactPoints.Remove(counterCircle);
+                                i--;
+                            }
+                            count = emitter.impactPoints.Count;
+                        }
                     }
-                    count = emitter.impactPoints.Count;
                 }
             }
+            
+            
+            
 
+        }
+
+        private void tbParticlesPerTick_Scroll(object sender, EventArgs e)
+        {
+            emitter.ParticlesPerTick = tbParticlesPerTick.Value;
+            lblParticlesPerTick.Text = $"{tbParticlesPerTick.Value} частиц/ тик";
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedItem.ToString() == "Задания") ModeForClick = 0;
+            else if (comboBox1.SelectedItem.ToString() == "Точка-пожиратель") ModeForClick = 1;
+            else if (comboBox1.SelectedItem.ToString() == "Точка-радар") ModeForClick = 2;
         }
     }
 }
