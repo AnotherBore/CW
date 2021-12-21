@@ -51,6 +51,7 @@ namespace CW
     {
         public Color FromColor;
         public Color ToColor;
+        Color CurrentColor;
 
         public static Color MixColor(Color color1, Color color2, float k)
         {
@@ -66,8 +67,8 @@ namespace CW
             float k = Math.Min(1f, Math.Abs(Life / 100));
 
 
-            var color = MixColor(ToColor, FromColor, k);
-            var b = new SolidBrush(color);
+            CurrentColor = MixColor(ToColor, FromColor, k);
+            var b = new SolidBrush(CurrentColor);
 
             g.FillEllipse(b, X - Radius, Y - Radius, Radius * 2, Radius * 2);
 

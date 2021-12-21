@@ -57,7 +57,40 @@ namespace CW
             }
 
         }
-
     }
 
+    public class RadarPoint : IImpactPoint
+    {
+        private List<Particle> particlesInside = new List<Particle>();
+        Color FillColor = Color.Aqua;
+        public int Radius = 40;
+        public RadarPoint(float x, float y) : base(x, y)
+        {
+        }
+        public override void Render(Graphics g)
+        {
+            g.DrawEllipse(new Pen(Color.Black, 3), X - Radius, Y - Radius, Radius * 2, Radius * 2);
+            StringFormat stringFormat = new StringFormat();
+            stringFormat.Alignment = StringAlignment.Center;
+            stringFormat.LineAlignment = StringAlignment.Center;
+
+            g.DrawString("" + particlesInside.Count, new Font("Arial", 10), Brushes.Black, X, Y, stringFormat);
+        }
+
+        public override void ImpactParticle(Particle particle)
+        {
+            var colorfull = particle as ParticleColorful;
+            
+            float gX = X - particle.X;
+            float gY = Y - particle.Y;
+
+            double r = Math.Sqrt(gX * gX + gY * gY); 
+            if (r + particle.Radius < Radius)
+            {
+                particlesInside.Add(particle);
+                colorfull.FromColor = FillColor;
+                colorfull.ToColor = FillColor;
+            }
+        }
+    }
 }

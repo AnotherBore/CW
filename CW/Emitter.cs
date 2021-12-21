@@ -43,6 +43,7 @@ namespace CW
             particle.SpeedY = SpeedMain;
 
             particle.Radius = Particle.rand.Next(RadiusMin, RadiusMax);
+            ResetColor(particle);
         }
 
         public virtual Particle CreateParticle()
@@ -52,6 +53,15 @@ namespace CW
             particle.ToColor = ColorTo;
 
             return particle;
+        }
+        public virtual void ResetColor(Particle particle)
+        {
+            var color = particle as ParticleColorful;
+            if (particle.Life > 0)
+            {
+                color.ToColor = ColorTo;
+                color.FromColor = ColorFrom;
+            }
         }
 
         public void UpdateState()

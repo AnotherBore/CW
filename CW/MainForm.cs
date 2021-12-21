@@ -3,7 +3,7 @@ namespace CW
     public partial class MainForm : Form
     {
         List<Emitter> emitters = new List<Emitter>();
-        List<CounterCircle> counterCircles = new List<CounterCircle>(); 
+        List<CounterCircle> counterCircles = new List<CounterCircle>();
         Emitter emitter;
         CounterCircle counterCircle;
         int ModeForClick;
@@ -79,42 +79,91 @@ namespace CW
             lblMaxRadius.Text = $"{tbMaxRadius.Value} пикселей";
         }
 
+        private int countOfType(int mode, List<IImpactPoint> particles)
+        {
+            int count = 0;
+            switch (mode)
+            {
+                case 1:
+                    foreach (var particle in particles)
+                    {
+                        if (particle is CounterCircle) count++;
+                    }
+                    break;
+                case 2:
+                    foreach (var particle in particles)
+                    {
+                        if (particle is RadarPoint) count++;
+                    }
+                    break;
+            }
+            return count;
+        }
         private void picDisplay_MouseUp(object sender, MouseEventArgs e)
         {
-            if(ModeForClick != 0)
+            if (ModeForClick != 0)
             {
                 if (ModeForClick == 1)
                 {
-                    var count = emitter.impactPoints.Count;
+                    int count = countOfType(1, emitter.impactPoints);
                     if (e.Button == MouseButtons.Left)
                     {
                         IImpactPoint counterCircle = new CounterCircle(e.X, e.Y);
                         emitter.impactPoints.Add(counterCircle);
-                    }                  
+                    }
                     else if (e.Button == MouseButtons.Right)
                     {
                         for (int i = 0; i < count; i++)
                         {
 
-                            var counterCircle = (CounterCircle)emitter.impactPoints[i];
-
-                            var x = Math.Abs(e.X - counterCircle.X);
-                            var y = Math.Abs(e.Y - counterCircle.Y);
-                            var lenght = Math.Sqrt(x * x + y * y);
-                            if (lenght < counterCircle.Radius)
+                            var counterCircle = emitter.impactPoints[i];
+                            if(counterCircle is CounterCircle)
                             {
-                                emitter.impactPoints.Remove(counterCircle);
-                                i--;
-                            }
-                            count = emitter.impactPoints.Count;
+                                CounterCircle counter = (CounterCircle)counterCircle;
+                                var x = Math.Abs(e.X - counterCircle.X);
+                                var y = Math.Abs(e.Y - counterCircle.Y);
+                                var lenght = Math.Sqrt(x * x + y * y);
+                                if (lenght < counter.Radius)
+                                {
+                                    emitter.impactPoints.Remove(counterCircle);
+                                    i--;
+                                }
+                                count = emitter.impactPoints.Count;
+                            } 
+                        }
+                    }
+                }
+                if (ModeForClick == 2)
+                {
+                    int count = countOfType(2, emitter.impactPoints);
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        IImpactPoint radarPoint = new RadarPoint(e.X, e.Y);
+                        emitter.impactPoints.Add(radarPoint);
+                    }
+                    else if (e.Button == MouseButtons.Right)
+                    {
+                        for (int i = 0; i < count; i++)
+                        {
+
+                            var radiusPoint = emitter.impactPoints[i];
+                            if(radiusPoint is RadarPoint)
+                            {
+                                RadarPoint radarPoint = (RadarPoint)radiusPoint;
+                                var x = Math.Abs(e.X - radiusPoint.X);
+                                var y = Math.Abs(e.Y - radiusPoint.Y);
+                                var lenght = Math.Sqrt(x * x + y * y);
+                                if (lenght < radarPoint.Radius)
+                                {
+                                    emitter.impactPoints.Remove(radiusPoint);
+                                    i--;
+                                }
+                                count = emitter.impactPoints.Count;
+                            }    
                         }
                     }
                 }
             }
-            
-            
-            
-
         }
 
         private void tbParticlesPerTick_Scroll(object sender, EventArgs e)
