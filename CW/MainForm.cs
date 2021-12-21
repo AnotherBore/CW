@@ -27,33 +27,17 @@ namespace CW
 
 
             emitters.Add(emitter);
-
-            //emitter.gravityPoints.Add(new GravityPoint(picDisplay.Width / 2, picDisplay.Height / 2));
         }
 
         private void timer_Tick(object sender, EventArgs e)
         {
             emitter.UpdateState();
-            UpdateCounterCircle();
-
-
 
             using (var g = Graphics.FromImage(picDisplay.Image))
             {
                 g.Clear(Color.Gainsboro);
                 emitter.Render(g);
-                foreach (var counterCircle in counterCircles)
-                {
-                    counterCircle.Draw(g);
-                }
-                foreach (var counterCircle in counterCircles)
-                {
-                    StringFormat stringFormat = new StringFormat();
-                    stringFormat.Alignment = StringAlignment.Center;
-                    stringFormat.LineAlignment = StringAlignment.Center;
 
-                    g.DrawString("" + counterCircle.Killed, new Font("Arial", 10), Brushes.Black, counterCircle.X, counterCircle.Y, stringFormat);
-                }
             }
             picDisplay.Invalidate();
         }
@@ -94,39 +78,30 @@ namespace CW
             lblMaxRadius.Text = $"{tbMaxRadius.Value} пикселей";
         }
 
-        public void UpdateCounterCircle()
-        {
-            foreach (var counterCircle in counterCircles)
-            {
-                foreach (var particle in emitter.particles)
-                {
-                    if (counterCircle.IsTouching(particle))
-                        counterCircle.Eat(particle);
-                }
-            }
-        }
-
         private void picDisplay_MouseUp(object sender, MouseEventArgs e)
         {
             if ( e.Button == MouseButtons.Left)
             {
-                counterCircle = new CounterCircle(e.X, e.Y);
-                counterCircles.Add(counterCircle);
+                IImpactPoint counterCircle = new CounterCircle(e.X, e.Y);
+                emitter.impactPoints.Add(counterCircle);
             }
+            var count = emitter.impactPoints.Count;
             if (e.Button == MouseButtons.Right)
             {
-                for (int i = 0; i < counterCircles.Count; i++)
+                for (int i = 0; i < count; i++)
                 {
-                    var blackHole = counterCircles[i];
+                    
+                    var counterCircle = (CounterCircle)emitter.impactPoints[i];
 
-                    var x = Math.Abs(e.X - blackHole.X);
-                    var y = Math.Abs(e.Y - blackHole.Y);
+                    var x = Math.Abs(e.X - counterCircle.X);
+                    var y = Math.Abs(e.Y - counterCircle.Y);
                     var lenght = Math.Sqrt(x * x + y * y);
-                    if (lenght < blackHole.Radius)
+                    if (lenght < counterCircle.Radius)
                     {
-                        counterCircles.Remove(blackHole);
+                        emitter.impactPoints.Remove(counterCircle);
                         i--;
                     }
+                    count = emitter.impactPoints.Count;
                 }
             }
 

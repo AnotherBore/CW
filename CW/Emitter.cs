@@ -9,7 +9,7 @@ namespace CW
     public class Emitter
     {
         public List<Particle> particles = new List<Particle>();
-        public List<IImpactPoint> gravityPoints = new List<IImpactPoint>();
+        public List<IImpactPoint> impactPoints = new List<IImpactPoint>();
 
         public int X; // координата X центра эмиттера
         public int Y; // соответствующая координата Y 
@@ -88,7 +88,7 @@ namespace CW
                 }
                 else
                 {
-                    foreach (var point in gravityPoints)
+                    foreach (var point in impactPoints)
                     {
                         point.ImpactParticle(particle);
                     }
@@ -116,7 +116,7 @@ namespace CW
                 particle.Draw(g);
             }
 
-            foreach (var point in gravityPoints)
+            foreach (var point in impactPoints)
             {
                 point.Render(g);
             }
