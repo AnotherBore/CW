@@ -54,16 +54,16 @@ namespace CW
             if (r < Radius)
             {
                 Killed++;
+                particle.Life = 0;
             }
-
-        }
+        }       
     }
 
     public class RadarPoint : IImpactPoint
     {
-        private List<Particle> particlesInside = new List<Particle>();
-        Color FillColor = Color.Aqua;
+        private int particlesInside = 0;
         public int Radius = 40;
+        ParticleColorful[] particleColorfuls = new ParticleColorful[1000];
         public RadarPoint(float x, float y) : base(x, y)
         {
         }
@@ -74,23 +74,32 @@ namespace CW
             stringFormat.Alignment = StringAlignment.Center;
             stringFormat.LineAlignment = StringAlignment.Center;
 
-            g.DrawString("" + particlesInside.Count, new Font("Arial", 10), Brushes.Black, X, Y, stringFormat);
+            g.DrawString("" + particlesInside, new Font("Arial", 10), Brushes.Black, X, Y, stringFormat);
         }
 
         public override void ImpactParticle(Particle particle)
         {
-            var colorfull = particle as ParticleColorful;
-            
-            float gX = X - particle.X;
-            float gY = Y - particle.Y;
+            var colorful = particle as ParticleColorful;
 
-            double r = Math.Sqrt(gX * gX + gY * gY); 
-            if (r + particle.Radius < Radius)
-            {
-                particlesInside.Add(particle);
-                colorfull.FromColor = FillColor;
-                colorfull.ToColor = FillColor;
-            }
-        }
+                float gX = X - particle.X;
+                float gY = Y - particle.Y;
+
+                double r = Math.Sqrt(gX * gX + gY * gY);
+                if (r + particle.Radius < Radius)
+                {
+                    particlesInside++;
+                    colorful.setColor(true);
+                }
+                else
+                {
+                   /* if(particlesInside > 0)
+                    {
+                        particlesInside--;
+                    }*/
+                    colorful.setColor(false);
+                }
+                
+                
+           }
     }
 }

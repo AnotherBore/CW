@@ -7,9 +7,10 @@ namespace CW
         Emitter emitter;
         CounterCircle counterCircle;
         int ModeForClick;
+        RadarPoint radarPoint;
         public MainForm()
         {
-
+            
             InitializeComponent();
             picDisplay.Image = new Bitmap(picDisplay.Width, picDisplay.Height);
             this.emitter = new TopEmitter
@@ -42,12 +43,60 @@ namespace CW
             }
             picDisplay.Invalidate();
         }
-
+        
         private void picDisplay_MouseMove(object sender, MouseEventArgs e)
-        {/*
-            emitter.MousePositionX = e.X;
-            emitter.MousePositionY = e.Y;*/
+        {
+            if (ModeForClick == 2)
+            {
+                if(radarPoint == null)
+                {
+                    radarPoint = new RadarPoint(e.X, e.Y);
+                    emitter.impactPoints.Add(radarPoint);
+                }
+                else
+                {
+                    radarPoint.X = e.X;
+                    radarPoint.Y = e.Y;
+                    emitter.impactPoints.Remove(radarPoint);
+                    emitter.impactPoints.Add(radarPoint);
+                }
+            }
         }
+
+        private void picDisplay_MouseWheel(object sender, MouseEventArgs e)
+        {
+
+            if (ModeForClick == 2)
+            {
+                int preRadius;
+                if (radarPoint != null)
+                {
+                    if(emitter.impactPoints.Count > 1)
+                    {
+                        emitter.impactPoints.Remove(radarPoint);
+                    }
+                        if (e.Delta > 0)
+                        {
+                            preRadius = radarPoint.Radius - e.Delta/3;
+                            if(preRadius > 5)
+                            {
+                                radarPoint.Radius = preRadius;
+                            }                          
+                        }
+                        else
+                        {
+                            preRadius = radarPoint.Radius + Math.Abs(e.Delta)/3;
+                            if (preRadius < 400)
+                            {
+                                radarPoint.Radius = preRadius;
+                            }
+                        }
+                    
+                    emitter.impactPoints.Add(radarPoint);
+                }
+            }
+        }
+
 
         private void picDisplay_MouseClick(object sender, MouseEventArgs e)
         {
@@ -130,36 +179,6 @@ namespace CW
                                 }
                                 count = emitter.impactPoints.Count;
                             } 
-                        }
-                    }
-                }
-                if (ModeForClick == 2)
-                {
-                    int count = countOfType(2, emitter.impactPoints);
-                    if (e.Button == MouseButtons.Left)
-                    {
-                        IImpactPoint radarPoint = new RadarPoint(e.X, e.Y);
-                        emitter.impactPoints.Add(radarPoint);
-                    }
-                    else if (e.Button == MouseButtons.Right)
-                    {
-                        for (int i = 0; i < count; i++)
-                        {
-
-                            var radiusPoint = emitter.impactPoints[i];
-                            if(radiusPoint is RadarPoint)
-                            {
-                                RadarPoint radarPoint = (RadarPoint)radiusPoint;
-                                var x = Math.Abs(e.X - radiusPoint.X);
-                                var y = Math.Abs(e.Y - radiusPoint.Y);
-                                var lenght = Math.Sqrt(x * x + y * y);
-                                if (lenght < radarPoint.Radius)
-                                {
-                                    emitter.impactPoints.Remove(radiusPoint);
-                                    i--;
-                                }
-                                count = emitter.impactPoints.Count;
-                            }    
                         }
                     }
                 }

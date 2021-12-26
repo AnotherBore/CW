@@ -52,6 +52,7 @@ namespace CW
         public Color FromColor;
         public Color ToColor;
         Color CurrentColor;
+        bool _isIsRadar;
 
         public static Color MixColor(Color color1, Color color2, float k)
         {
@@ -62,12 +63,20 @@ namespace CW
                 (int)(color2.B * k + color1.B * (1 - k))
             );
         }
+        public void setColor(bool isIsRadar)
+        {
+            _isIsRadar = isIsRadar;
+        }
         public override void Draw(Graphics g)
         {
             float k = Math.Min(1f, Math.Abs(Life / 100));
 
 
-            CurrentColor = MixColor(ToColor, FromColor, k);
+            if (_isIsRadar)
+                CurrentColor = Color.Aqua;
+            else
+                CurrentColor = MixColor(ToColor, FromColor, k);
+
             var b = new SolidBrush(CurrentColor);
 
             g.FillEllipse(b, X - Radius, Y - Radius, Radius * 2, Radius * 2);
