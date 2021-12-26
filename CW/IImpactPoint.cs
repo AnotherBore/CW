@@ -61,9 +61,9 @@ namespace CW
 
     public class RadarPoint : IImpactPoint
     {
-        private int particlesInside = 0;
+        List<Particle> PI = new List<Particle>();
+        public int particlesInside = 0;
         public int Radius = 40;
-        ParticleColorful[] particleColorfuls = new ParticleColorful[1000];
         public RadarPoint(float x, float y) : base(x, y)
         {
         }
@@ -73,8 +73,10 @@ namespace CW
             StringFormat stringFormat = new StringFormat();
             stringFormat.Alignment = StringAlignment.Center;
             stringFormat.LineAlignment = StringAlignment.Center;
-
-            g.DrawString("" + particlesInside, new Font("Arial", 10), Brushes.Black, X, Y, stringFormat);
+            if(particlesInside > 0)
+            {
+                g.DrawString("" + particlesInside, new Font("Arial", 10), Brushes.Black, X, Y, stringFormat);
+            }
         }
 
         public override void ImpactParticle(Particle particle)
@@ -87,18 +89,21 @@ namespace CW
                 double r = Math.Sqrt(gX * gX + gY * gY);
                 if (r + particle.Radius < Radius)
                 {
-                    particlesInside++;
+                    if(PI.Contains(particle) == false)
+                    {
+                        PI.Add(particle);
+                    }
                     colorful.setColor(true);
                 }
                 else
                 {
-                   /* if(particlesInside > 0)
+                    if (PI.Contains(particle))
                     {
-                        particlesInside--;
-                    }*/
+                        PI.Remove(particle);
+                    }
                     colorful.setColor(false);
                 }
-                
+                particlesInside = PI.Count;
                 
            }
     }

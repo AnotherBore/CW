@@ -55,10 +55,22 @@ namespace CW
                 }
                 else
                 {
+                    if(radarPoint.Radius == 0)
+                    {
+                        radarPoint.Radius = 40;
+                    }
                     radarPoint.X = e.X;
                     radarPoint.Y = e.Y;
                     emitter.impactPoints.Remove(radarPoint);
                     emitter.impactPoints.Add(radarPoint);
+                }
+            }
+            else
+            {
+                if (radarPoint != null)
+                {
+                    radarPoint.Radius = 0;
+                    radarPoint.particlesInside = 0;
                 }
             }
         }
@@ -134,15 +146,15 @@ namespace CW
             switch (mode)
             {
                 case 1:
-                    foreach (var particle in particles)
+                    foreach (var point in emitter.impactPoints)
                     {
-                        if (particle is CounterCircle) count++;
+                        if (point is CounterCircle) count++;
                     }
                     break;
                 case 2:
-                    foreach (var particle in particles)
+                    foreach (var point in emitter.impactPoints)
                     {
-                        if (particle is RadarPoint) count++;
+                        if (point is RadarPoint) count++;
                     }
                     break;
             }
@@ -154,7 +166,7 @@ namespace CW
             {
                 if (ModeForClick == 1)
                 {
-                    int count = countOfType(1, emitter.impactPoints);
+                    int count = emitter.impactPoints.Count;
                     if (e.Button == MouseButtons.Left)
                     {
                         IImpactPoint counterCircle = new CounterCircle(e.X, e.Y);
