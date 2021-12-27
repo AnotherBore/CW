@@ -8,8 +8,8 @@ namespace CW
         [STAThread]
         static void Main()
         {
-            ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm());
+            ApplicationConfiguration.Initialize();//инициализируем настройки формы
+            Application.Run(new MainForm());//запускаем приложение, выводя форму
         }
     }
 }

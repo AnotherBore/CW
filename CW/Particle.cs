@@ -17,7 +17,7 @@ namespace CW
         public float SpeedY;
         public float Life;
 
-        public Particle()
+        public Particle()//рандомно генерируем
         {
             var direction = (double)rand.Next(360);
             var speed = 1 + rand.Next(10);
@@ -37,7 +37,7 @@ namespace CW
 
             int alpha = (int)(k * 255);
 
-            var color = Color.FromArgb(alpha, Color.Black);
+            var color = Color.FromArgb(alpha, Color.Black);//создаем цвет, исходя из количества жизней
             var b = new SolidBrush(color);
 
           
@@ -54,7 +54,7 @@ namespace CW
         Color CurrentColor;
         bool _isIsRadar;
 
-        public static Color MixColor(Color color1, Color color2, float k)
+        public static Color MixColor(Color color1, Color color2, float k)//мешаем цвета
         {
             return Color.FromArgb(
                 (int)(color2.A * k + color1.A * (1 - k)),
@@ -72,16 +72,16 @@ namespace CW
             float k = Math.Min(1f, Math.Abs(Life / 100));
 
 
-            if (_isIsRadar)
-                CurrentColor = Color.Aqua;
+            if (_isIsRadar)//если попала в радар
+                CurrentColor = Color.Aqua;//цвет для радара
             else
-                CurrentColor = MixColor(ToColor, FromColor, k);
+                CurrentColor = MixColor(ToColor, FromColor, k);//мешаем цвета как обычно
 
             var b = new SolidBrush(CurrentColor);
 
             g.FillEllipse(b, X - Radius, Y - Radius, Radius * 2, Radius * 2);
 
-            b.Dispose();
+            b.Dispose();//чистим, чтоб сборщик не отрабатывал часто
         }
     }
 }

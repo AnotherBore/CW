@@ -25,12 +25,12 @@ namespace CW
         public Color ColorFrom = Color.Gold; // начальный цвет частицы
         public Color ColorTo = Color.FromArgb(0, Color.DeepPink); // конечный цвет частиц
 
-        public float GravitationX = 0;
-        public float GravitationY = 1;
-        public int ParticlesCount = 1000;
+        public float GravitationX = 0; //гравитация по оси X
+        public float GravitationY = 1;//гравитация по оси Y
+        public int ParticlesCount = 1000;//максимальное количество частиц
 
-        public int ParticlesPerTick = 10;
-        public virtual void ResetParticle(Particle particle)
+        public int ParticlesPerTick = 10;//количество частиц за такт
+        public virtual void ResetParticle(Particle particle)//обновляем частицу, рандомно генерируя начальное положение и характеристики
         {
             particle.Life = Particle.rand.Next(LifeMin, LifeMax);
 
@@ -48,13 +48,13 @@ namespace CW
 
         public virtual Particle CreateParticle()
         {
-            var particle = new ParticleColorful();
+            var particle = new ParticleColorful();//создаем цветную частицу
             particle.FromColor = ColorFrom;
             particle.ToColor = ColorTo;
 
             return particle;
         }
-        public virtual void ResetColor(Particle particle)
+        public virtual void ResetColor(Particle particle)//сброс цвета частицы
         {
             var color = particle as ParticleColorful;
             if (particle.Life > 0)
@@ -67,21 +67,21 @@ namespace CW
         public void UpdateState()
         {
 
-            for (var i = 0; i < ParticlesPerTick; ++i)
+            for (var i = 0; i < ParticlesPerTick; ++i) //генерируем частицы в количество, заданном пользователем
             {
-                if (particles.Count < ParticlesCount)
+                if (particles.Count < ParticlesCount)//пока не заполним список полностью
                 {
                     var particle = CreateParticle();
 
                     ResetParticle(particle);
                     particles.Add(particle);
                 }
-                else
+                else//если список заполнен, пропускаем
                 {
                     break;
                 }
             }
-            int particlesToCreate = ParticlesPerTick;
+            int particlesToCreate = ParticlesPerTick;//буферизируем количество чатиц на такт, чтобы можно было отнимать
 
             foreach (var particle in particles)
             {
@@ -135,19 +135,16 @@ namespace CW
         }
     }
 
-    public class TopEmitter : Emitter
+    public class TopEmitter : Emitter//эмиттер со сбросом чатиц сверху (снежный тип)
     {
-        public int Width;
+        public int Width; // ширина, на которую генерируем частицы
         public override void ResetParticle(Particle particle)
         {
-            base.ResetParticle(particle); 
+            base.ResetParticle(particle);//сбрасываем частицу как обычно
 
           
             particle.X = Particle.rand.Next(Width);
             particle.Y = 0;  
-/*
-            particle.SpeedY = 1; 
-            particle.SpeedX = Particle.rand.Next(-2, 2); */
         }
     }
 }
