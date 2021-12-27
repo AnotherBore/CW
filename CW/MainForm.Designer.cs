@@ -174,9 +174,9 @@
             this.lblDirection.AutoSize = true;
             this.lblDirection.Location = new System.Drawing.Point(1386, 27);
             this.lblDirection.Name = "lblDirection";
-            this.lblDirection.Size = new System.Drawing.Size(32, 30);
+            this.lblDirection.Size = new System.Drawing.Size(43, 30);
             this.lblDirection.TabIndex = 2;
-            this.lblDirection.Text = "0°";
+            this.lblDirection.Text = "90°";
             // 
             // label2
             // 
